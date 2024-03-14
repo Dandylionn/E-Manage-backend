@@ -1,7 +1,6 @@
 package com.udemy.spring.bootrestfulwebservices.controller;
 
 import com.udemy.spring.bootrestfulwebservices.dto.UserDto;
-import com.udemy.spring.bootrestfulwebservices.entity.User;
 import com.udemy.spring.bootrestfulwebservices.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -53,4 +52,16 @@ public class UserController {
         userService.deleteUser(userId);
         return new ResponseEntity<>("User sucessfully deleted!", HttpStatus.OK);
     }
+
+//    @ExceptionHandler(ResourceNotFoundException.class)
+//    public ResponseEntity<ErrorDetails> handleResourceNotFoundException(ResourceNotFoundException exception,
+//                                                                        WebRequest webRequest){
+//        ErrorDetails errorDetails = new ErrorDetails(
+//                LocalDateTime.now(),
+//                exception.getMessage(),
+//                webRequest.getDescription(false),
+//                        "USER_NOT_FOUND"
+//        );
+//        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+//    }
 }
