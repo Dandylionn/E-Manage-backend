@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Bean;
 				url = "dummy2.com"
 		)
 )
-public class SpringBootRestfulWebservicesApplication {
+public class EmployeeService {
 
 	@Bean
 	public ModelMapper modelMapper(){
@@ -39,7 +39,7 @@ public class SpringBootRestfulWebservicesApplication {
 	}
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringBootRestfulWebservicesApplication.class, args);
+		SpringApplication.run(EmployeeService.class, args);
 	}
 
 }
