@@ -1,5 +1,6 @@
 package com.udemy.spring.employeeservice.service.impl;
 
+import com.udemy.spring.employeeservice.dto.APIResponseDto;
 import com.udemy.spring.employeeservice.dto.DepartmentDto;
 import com.udemy.spring.employeeservice.dto.EmployeeDto;
 import com.udemy.spring.employeeservice.entity.Employee;
@@ -48,7 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto getEmployeeById(Long employeeId) {
+    public APIResponseDto getEmployeeById(Long employeeId) {
 
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(
                 () -> new ResourceNotFoundException("Employee", "id", employeeId)
@@ -61,8 +62,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         DepartmentDto departmentDto = responseEntity.getBody();
 
         //Mapstruct method
-//        return AutoUserMapper.MAPPER.mapToUserDto(optionalUser.get());
-        return AutoEmployeeMapper.MAPPER.mapToEmployeeDto(employee);
+        EmployeeDto employeeDto = AutoEmployeeMapper.MAPPER.mapToEmployeeDto(employee);
+
+        APIResponseDto apiResponseDto = new APIResponseDto();
+        apiResponseDto.setEmployeeDto((employeeDto));
+        apiResponseDto.setDepartmentDto(departmentDto);
+
+        return apiResponseDto;
     }
 
     @Override

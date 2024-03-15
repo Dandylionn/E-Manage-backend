@@ -1,6 +1,7 @@
 package com.udemy.spring.employeeservice.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class Employee {
     private String lastName;
     @Column(nullable = false, unique = true)
     private String email;
-
+    @NotNull
     private String departmentCode;
 
 }

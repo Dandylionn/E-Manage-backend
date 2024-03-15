@@ -1,5 +1,6 @@
 package com.udemy.spring.employeeservice.controller;
 
+import com.udemy.spring.employeeservice.dto.APIResponseDto;
 import com.udemy.spring.employeeservice.dto.EmployeeDto;
 import com.udemy.spring.employeeservice.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,9 +49,9 @@ public class EmployeeController {
             description = "HTTP Status 200 SUCCESS"
     )
     @GetMapping("{id}")
-    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable("id") Long employeeId){
-        EmployeeDto employee = employeeService.getEmployeeById(employeeId);
-        return new ResponseEntity<>(employee, HttpStatus.OK);
+    public ResponseEntity<APIResponseDto> getEmployeeById(@PathVariable("id") Long employeeId){
+        APIResponseDto apiResponseDto = employeeService.getEmployeeById(employeeId);
+        return new ResponseEntity<>(apiResponseDto, HttpStatus.OK);
     }
 
     //build get all employees
