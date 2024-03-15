@@ -8,12 +8,11 @@ import com.udemy.spring.employeeservice.exception.EmailAlreadyExistsException;
 import com.udemy.spring.employeeservice.exception.ResourceNotFoundException;
 import com.udemy.spring.employeeservice.mapper.AutoEmployeeMapper;
 import com.udemy.spring.employeeservice.repository.EmployeeRepository;
+import com.udemy.spring.employeeservice.service.APIClient;
 import com.udemy.spring.employeeservice.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +23,10 @@ import java.util.stream.Collectors;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository employeeRepository;
-    private RestTemplate restTemplate;
+
+//    private RestTemplate restTemplate;
+//    private WebClient webClient;
+    private APIClient apiClient;
 
     private ModelMapper modelMapper;
     @Override
@@ -55,11 +57,16 @@ public class EmployeeServiceImpl implements EmployeeService {
                 () -> new ResourceNotFoundException("Employee", "id", employeeId)
         );
 
-        ResponseEntity<DepartmentDto> responseEntity = restTemplate.getForEntity("http://localhost:8080/api/departments/"
-                + employee.getDepartmentCode(),
-                DepartmentDto.class);
+//        ResponseEntity<DepartmentDto> responseEntity = restTemplate.getForEntity("http://localhost:8080/api/departments/"
+//                + employee.getDepartmentCode(),
+//                DepartmentDto.class);
+//        DepartmentDto departmentDto = responseEntity.getBody();
 
-        DepartmentDto departmentDto = responseEntity.getBody();
+//        DepartmentDto departmentDto = webClient.get().uri("http://localhost:8080/api/departments/"+ employee.getDepartmentCode())
+//                .retrieve().bodyToMono(DepartmentDto.class).block();
+
+        DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
+
 
         //Mapstruct method
         EmployeeDto employeeDto = AutoEmployeeMapper.MAPPER.mapToEmployeeDto(employee);
