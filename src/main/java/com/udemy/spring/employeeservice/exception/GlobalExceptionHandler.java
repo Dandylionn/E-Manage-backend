@@ -1,4 +1,4 @@
-package com.udemy.spring.bootrestfulwebservices.exception;
+package com.udemy.spring.employeeservice.exception;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 LocalDateTime.now(),
                 exception.getMessage(),
                 webRequest.getDescription(false),
-                "USER_NOT_FOUND"
+                "EMPLOYEE_NOT_FOUND"
         );
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
@@ -38,7 +38,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 LocalDateTime.now(),
                 exception.getMessage(),
                 webRequest.getDescription(false),
-                "USEREMAIL_ALREADY_EXISTS"
+                "EMPLOYEEEMAIL_ALREADY_EXISTS"
         );
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }

@@ -1,4 +1,4 @@
-package com.udemy.spring.bootrestfulwebservices.exception;
+package com.udemy.spring.employeeservice.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

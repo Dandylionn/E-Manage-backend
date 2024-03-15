@@ -1,4 +1,4 @@
-package com.udemy.spring.bootrestfulwebservices;
+package com.udemy.spring.employeeservice;
 
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
