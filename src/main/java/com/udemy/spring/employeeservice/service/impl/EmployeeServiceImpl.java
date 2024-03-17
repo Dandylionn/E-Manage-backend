@@ -10,9 +10,11 @@ import com.udemy.spring.employeeservice.mapper.AutoEmployeeMapper;
 import com.udemy.spring.employeeservice.repository.EmployeeRepository;
 import com.udemy.spring.employeeservice.service.APIClient;
 import com.udemy.spring.employeeservice.service.EmployeeService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
 
 //    private RestTemplate restTemplate;
-//    private WebClient webClient;
+    private WebClient webClient;
     private APIClient apiClient;
 
     private ModelMapper modelMapper;
@@ -50,6 +52,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return savedEmployeeDto;
     }
 
+    @CircuitBreaker(name="${spring.application.name}", fallbackMethod = "getDefaultDepartment")
     @Override
     public APIResponseDto getEmployeeById(Long employeeId) {
 
@@ -62,9 +65,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 //                DepartmentDto.class);
 //        DepartmentDto departmentDto = responseEntity.getBody();
 
-//        DepartmentDto departmentDto = webClient.get().uri("http://localhost:8080/api/departments/"+ employee.getDepartmentCode())
+        //webclient method
+//        DepartmentDto departmentDto = webClient.get().uri("http://localhost:8080/api/departments/"
+//        + employee.getDepartmentCode())
 //                .retrieve().bodyToMono(DepartmentDto.class).block();
 
+        //apiclient method
         DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
 
 
@@ -108,6 +114,25 @@ public class EmployeeServiceImpl implements EmployeeService {
                 () -> new ResourceNotFoundException("Employee", "id", employeeId)
         );
         employeeRepository.deleteById(employeeId);
+    }
+
+    public APIResponseDto getDefaultDepartment(Long employeeId){
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(
+                () -> new ResourceNotFoundException("Employee", "id", employeeId)
+        );
+        DepartmentDto departmentDto = new DepartmentDto();
+        departmentDto.setDepartmentName("Default Department");
+        departmentDto.setDepartmentCode("Default");
+        departmentDto.setDepartmentDescription("Default Description");
+
+        //Mapstruct method
+        EmployeeDto employeeDto = AutoEmployeeMapper.MAPPER.mapToEmployeeDto(employee);
+
+        APIResponseDto apiResponseDto = new APIResponseDto();
+        apiResponseDto.setEmployeeDto((employeeDto));
+        apiResponseDto.setDepartmentDto(departmentDto);
+
+        return apiResponseDto;
     }
 
 
