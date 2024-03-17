@@ -10,9 +10,11 @@ import com.udemy.spring.employeeservice.mapper.AutoEmployeeMapper;
 import com.udemy.spring.employeeservice.repository.EmployeeRepository;
 import com.udemy.spring.employeeservice.service.APIClient;
 import com.udemy.spring.employeeservice.service.EmployeeService;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -31,6 +33,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     private APIClient apiClient;
 
     private ModelMapper modelMapper;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeServiceImpl.class);
+
     @Override
     public EmployeeDto createEmployee(EmployeeDto employeeDto) {
 
@@ -52,9 +57,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         return savedEmployeeDto;
     }
 
-    @CircuitBreaker(name="${spring.application.name}", fallbackMethod = "getDefaultDepartment")
+//    @CircuitBreaker(name="${spring.application.name}", fallbackMethod = "getDefaultDepartment")
+    @Retry(name = "${spring.application.name}",  fallbackMethod = "getDefaultDepartment")
     @Override
     public APIResponseDto getEmployeeById(Long employeeId) {
+
+        LOGGER.info("inside getEmployeeById() method");
 
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(
                 () -> new ResourceNotFoundException("Employee", "id", employeeId)
@@ -116,7 +124,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.deleteById(employeeId);
     }
 
-    public APIResponseDto getDefaultDepartment(Long employeeId){
+    public APIResponseDto getDefaultDepartment(Long employeeId, Exception exception){
+
+        LOGGER.info("inside getDefaultDepartment() method");
+
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(
                 () -> new ResourceNotFoundException("Employee", "id", employeeId)
         );
