@@ -3,6 +3,7 @@ package com.udemy.spring.employeeservice.service.impl;
 import com.udemy.spring.employeeservice.dto.APIResponseDto;
 import com.udemy.spring.employeeservice.dto.DepartmentDto;
 import com.udemy.spring.employeeservice.dto.EmployeeDto;
+import com.udemy.spring.employeeservice.dto.OrganizationDto;
 import com.udemy.spring.employeeservice.entity.Employee;
 import com.udemy.spring.employeeservice.exception.EmailAlreadyExistsException;
 import com.udemy.spring.employeeservice.exception.ResourceNotFoundException;
@@ -74,12 +75,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        DepartmentDto departmentDto = responseEntity.getBody();
 
         //webclient method
-//        DepartmentDto departmentDto = webClient.get().uri("http://localhost:8080/api/departments/"
-//        + employee.getDepartmentCode())
-//                .retrieve().bodyToMono(DepartmentDto.class).block();
+        DepartmentDto departmentDto = webClient.get().uri("http://localhost:8080/api/departments/"
+        + employee.getDepartmentCode())
+                .retrieve().bodyToMono(DepartmentDto.class).block();
+
+        OrganizationDto organizationDto = webClient.get().uri("http://localhost:8083/api/organizations/"
+                        + employee.getOrganizationCode())
+                .retrieve().bodyToMono(OrganizationDto.class).block();
 
         //apiclient method
-        DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
+//        DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
 
 
         //Mapstruct method
@@ -88,6 +93,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         APIResponseDto apiResponseDto = new APIResponseDto();
         apiResponseDto.setEmployeeDto((employeeDto));
         apiResponseDto.setDepartmentDto(departmentDto);
+        apiResponseDto.setOrganizationDto(organizationDto);
 
         return apiResponseDto;
     }
