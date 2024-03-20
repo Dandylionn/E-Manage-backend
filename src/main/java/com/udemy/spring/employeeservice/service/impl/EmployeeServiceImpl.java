@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -91,9 +92,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         EmployeeDto employeeDto = AutoEmployeeMapper.MAPPER.mapToEmployeeDto(employee);
 
         APIResponseDto apiResponseDto = new APIResponseDto();
-        apiResponseDto.setEmployeeDto((employeeDto));
-        apiResponseDto.setDepartmentDto(departmentDto);
-        apiResponseDto.setOrganizationDto(organizationDto);
+        apiResponseDto.setEmployee((employeeDto));
+        apiResponseDto.setDepartment(departmentDto);
+        apiResponseDto.setOrganization(organizationDto);
 
         return apiResponseDto;
     }
@@ -142,12 +143,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         departmentDto.setDepartmentCode("Default");
         departmentDto.setDepartmentDescription("Default Description");
 
+        OrganizationDto organizationDto = new OrganizationDto();
+        organizationDto.setOrganizationName("Default Organization Name");
+        organizationDto.setOrganizationDescription("Default Organization Description");
+        organizationDto.setOrganizationCode("Default Code");
+        organizationDto.setOrganizationCreatedDate(LocalDateTime.now());
+
         //Mapstruct method
         EmployeeDto employeeDto = AutoEmployeeMapper.MAPPER.mapToEmployeeDto(employee);
 
         APIResponseDto apiResponseDto = new APIResponseDto();
-        apiResponseDto.setEmployeeDto((employeeDto));
-        apiResponseDto.setDepartmentDto(departmentDto);
+        apiResponseDto.setEmployee((employeeDto));
+        apiResponseDto.setDepartment(departmentDto);
+        apiResponseDto.setOrganization(organizationDto);
 
         return apiResponseDto;
     }
